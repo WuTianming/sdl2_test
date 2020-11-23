@@ -1,4 +1,5 @@
 makefile
+SDL_test
 
 # vim swap files
 *.swp
