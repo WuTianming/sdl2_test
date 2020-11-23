@@ -3,7 +3,6 @@
 #include <cstdio>
 
 #include <SDL2/SDL.h>
-#include <GLES/gl.h>
 
 int main() {
     SDL_Window *window = NULL;
