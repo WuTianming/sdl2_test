@@ -3,29 +3,32 @@
 #include <cstdio>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 bool Update(SDL_Window *window, SDL_Renderer *renderer) {
-    int done = 0;
     static int x = 320, y = 240;
 
+    // 用 PollEvent 拉取事件，用于检测是否需要退出程序
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_WINDOWEVENT_CLOSE
                 || event.type == SDL_QUIT) {
-            done = 1; return done;
+            return false;
         } else if (event.type == SDL_KEYDOWN) {
             if (event.key.keysym.sym == SDLK_ESCAPE) {
-                done = 1; return done;
+                return false;
             }
         }
     }
 
+    // GetKeyboardState 用于获取实时的键盘按键情况，可以知道哪些键是处于按下状态。据此移动人物等
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_LEFT]) { x -= 2; }
     if (state[SDL_SCANCODE_RIGHT]) { x += 2; }
     if (state[SDL_SCANCODE_UP]) { y -= 2; }
     if (state[SDL_SCANCODE_DOWN]) { y += 2; }
 
+    // 处理完事件之后，更新 renderer，重绘画面
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
@@ -37,7 +40,8 @@ bool Update(SDL_Window *window, SDL_Renderer *renderer) {
     SDL_RenderDrawLine(renderer, 320, 240, x, y);
 
     SDL_RenderPresent(renderer);
-    return done;
+
+    return true;
 }
 
 int main() {
@@ -53,15 +57,12 @@ int main() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
-    int done = 0;
-    SDL_Event event;
-    while (!done) {
+    // Main cycle
+    while (Update(window, renderer))
         SDL_Delay(10);
-        done = Update(window, renderer);
-    }
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
