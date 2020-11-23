@@ -1,6 +1,9 @@
 makefile
 SDL_test
 
+# macOS specific
+.DS_Store
+
 # vim swap files
 *.swp
 
