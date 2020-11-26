@@ -8,6 +8,7 @@
 
 const char *pic001_name = "a.png";
 SDL_Texture *pic001_t;
+Uint32 startTime = 0;
 
 bool Update(SDL_Window *window, SDL_Renderer *renderer) {
     static int x = 320, y = 240;
@@ -36,7 +37,7 @@ bool Update(SDL_Window *window, SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
-    // 画中间的一块绿色，虽然没用。。
+    // Pulsate
     SDL_Rect rect = { 220, 140, 200, 200 };
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 100);
     SDL_RenderFillRect(renderer, &rect);
@@ -89,8 +90,9 @@ int main() {
 
     // Audio
     Mix_Music *onestop;
-    onestop = Mix_LoadMUS("onestop.mid");
+    onestop = Mix_LoadMUS("辉光之针的小人族.mid");
     Mix_PlayMusic(onestop, -1);
+    startTime = SDL_GetTicks();
 
     // 主循环
     while (Update(window, renderer))

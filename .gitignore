@@ -2,6 +2,7 @@ makefile
 SDL_test
 compile_commands.json
 .*
+*.mid
 
 # macOS specific
 .DS_Store
